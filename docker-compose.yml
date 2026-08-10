@@ -1,0 +1,29 @@
+# A versão da linguagem do manifesto
+version: '3.8'
+
+# Nossos serviços (As caixas que vamos subir)
+services:
+  # O nome que demos para a nossa Despensa (Banco de Dados)
+  db:
+    # A imagem oficial que vamos baixar da Internet (Postgres versão 16)
+    image: postgres:16-alpine
+    # O nome do contêiner quando ele estiver rodando
+    container_name: smart_project_db
+    # Mapeamento de Portas (Porta da sua máquina : Porta de dentro do contêiner)
+    ports:
+      - "5432:5432"
+    # As variáveis de ambiente (A senha do nosso cofre)
+    # ⚠️ AVISO DO ARQUITETO: Hoje escrevemos a senha aqui para facilitar o aprendizado. No mundo corporativo, usaremos cofres virtuais (arquivos .env) para esconder isso.
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=senha_ultra_secreta
+      - POSTGRES_DB=smart_project
+    # Garante que os dados não sumam se você desligar o computador (Os dados ficam na pasta pgdata)
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # Se o computador reiniciar, o Docker liga o banco sozinho
+    restart: unless-stopped
+
+# Declaração do volume (O disco rígido virtual)
+volumes:
+  pgdata:
